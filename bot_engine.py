@@ -9,17 +9,25 @@ from config import *
 
 class TradingBot:
     def __init__(self):
-        # Public exchange for market data (no auth needed)
+        # Public exchange for market data (uses testnet for global access)
         self.public_exchange = ccxt.bybit({
             'enableRateLimit': True,
+            'options': {
+                'defaultType': 'spot',
+            }
         })
+        self.public_exchange.set_sandbox_mode(True)  # Use testnet
         
         # Private exchange for account operations (uses your keys)
         self.private_exchange = ccxt.bybit({
             'apiKey': API_KEY,
             'secret': API_SECRET,
             'enableRateLimit': True,
+            'options': {
+                'defaultType': 'spot',
+            }
         })
+        self.private_exchange.set_sandbox_mode(True)  # Use testnet
         
         self.settings = self.load_settings()
         self.state = self.load_state()
